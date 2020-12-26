@@ -4,7 +4,7 @@ REPO_NAME="cloudmyit/php-cicd"
 
 VERSIONS={
     'php': [
-        '7.2.5',
+        '7.2',
         '7.3',
         '7.4',
         '8.0'
@@ -42,7 +42,10 @@ for server in VERSIONS.keys():
             dockerfile = 'services/' + server + "/Dockerfile"
         # Build the Image
         cmd = 'docker build services/' + server + ' -f ' + dockerfile + ' --build-arg VERSION=' + version + ' -t ' + REPO_NAME + ':' + server + '-' + version
-        print(cmd)
+        
+        if(float(max(VERSIONS[server])) == float(version)):
+            cmd = cmd + ' -t ' + REPO_NAME + ':' + server + '-latest'
+        
         returned_value = subprocess.call(cmd, shell=True)
         
         # Exit if Error Occurs
