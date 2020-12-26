@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+REPO_NAME="cloudmyit/php-cicd"
+
 VERSIONS={
     'php': [
         '7.2.5',
@@ -34,12 +36,14 @@ for server in VERSIONS.keys():
     # And each version for said server type
     for version in VERSIONS[server]:
         # Check if a custom docker imge file exists
-        if os.path.exists(server + "/Dockerfile-" + version):
-            dockerfile = server + "/Dockerfile-" + version
+        if os.path.exists('services/' + server + "/Dockerfile-" + version):
+            dockerfile = 'services/' + server + "/Dockerfile-" + version
         else:
-            dockerfile = server + "/Dockerfile"
+            dockerfile = 'services/' + server + "/Dockerfile"
         # Build the Image
-        returned_value = subprocess.call('docker build ' + server + ' -f ' + dockerfile + ' --build-arg VERSION=' + version, shell=True)
+        cmd = 'docker build services/' + server + ' -f ' + dockerfile + ' --build-arg VERSION=' + version + ' -t ' + REPO_NAME + ':' + server + '-' + version
+        print(cmd)
+        returned_value = subprocess.call(cmd, shell=True)
         
         # Exit if Error Occurs
         if(returned_value > 0):

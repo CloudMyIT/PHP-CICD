@@ -1,4 +1,0 @@
-ARG VERSION
-FROM postgres:${VERSION}
-ARG VERSION
-RUN echo "Building POSTGRESQL IMAGE - postgres:$VERSION"
