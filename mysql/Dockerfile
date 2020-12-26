@@ -1,0 +1,4 @@
+ARG VERSION
+FROM mysql:${VERSION}
+ARG VERSION
+RUN echo "Building MYSQL IMAGE - mysql:$VERSION"
