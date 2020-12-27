@@ -1,0 +1,16 @@
+version: "3.1"
+
+services:
+  php:
+    image: "cloudmyit/php-cicd:php-${VERSION_PHP}"
+    volumes:
+      - ${CODE_PATH}:/opt
+    depends_on:
+      - mysql
+      - postgresql
+
+  mysql:
+    image: "cloudmyit/php-cicd:mysql-${VERSION_MYSQL}"
+
+  postgresql:
+    image: "cloudmyit/php-cicd:postgresql-${VERSION_POSTGRESQL}"
