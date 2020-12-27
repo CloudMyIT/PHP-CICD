@@ -1,18 +1,29 @@
 #!/usr/bin/python3
 
-CODE_PATH="./"
+###
+# Build Settings
+###
+PUSH_ON_BUILD=False
 
+###
+# CI Settings
+###
+CODE_PATH="/srv/samba/sda/CloudMyIT/PHP-CICD/"
 CI_COMMANDS=[
     "pwd",
     "ls -al",
-    # "pwd",
-    # "ls -al",
-    #"php -v"
 ]
+CI_EXIT_ON_FAIL=True
+CI_ENV_BADGES=True
+CI_ENV_BADGE_PATH="./badges"
 
+###
+# General Settings
+###
 REPO_NAME="cloudmyit/php-cicd"
 
-PUSH_ON_BUILD=False
+# Currently we generate 96 Environments 
+# count(environments) = count(php) * count(mysql) * count(postgresql) * ...
 
 VERSIONS={
     # PHP can only have x.x versions because it does not have a "latest-fpm" tag

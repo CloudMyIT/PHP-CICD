@@ -12,6 +12,7 @@
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
 	},
 	"workspaceMount": "source=/srv/samba/sda/CloudMyIT/PHP-CICD/,target=/workspace,type=bind,consistency=cached",
+	"workspaceFolder": "/workspace/PHP-CICD",
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash"

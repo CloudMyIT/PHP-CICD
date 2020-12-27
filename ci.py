@@ -5,23 +5,28 @@
 ###
 
 #Import Settings
-from settings import VERSIONS, REPO_NAME, CODE_PATH, CI_COMMANDS
+from settings import VERSIONS, REPO_NAME, CODE_PATH, CI_COMMANDS, CI_EXIT_ON_FAIL, CI_ENV_BADGES, CI_ENV_BADGE_PATH
 
 # Import Libs
 import os
 import subprocess
 import itertools
+import urllib.request
+import urllib.parse
 
+# Prep some general settings
 service_names = sorted(VERSIONS.keys());
 service_versions = list()
-
 for service in service_names:
     service_versions.append(VERSIONS[service])
 
+# Iterate though each environment combination
 for combination in list(itertools.product(*service_versions)):
     env = "CODE_PATH=" + CODE_PATH + " "
+    env_slug=""
     for x in range(len(combination)):
         env = env + "VERSION_%s=%s " % (service_names[x].upper(), combination[x])
+        env_slug = env_slug + "%s=%s " % (service_names[x].upper(), combination[x])
 
     cmd = "docker-compose exec php "
 
@@ -32,17 +37,28 @@ for combination in list(itertools.product(*service_versions)):
         exit(returned_value)
 
     # Run CI Commands
+    bade_color="green"
+    bade_message="Success"
     for ci_command in CI_COMMANDS:
-        print(env + cmd + "/bin/bash -c 'cd /opt &&" + ci_command +"'")
         returned_value = subprocess.call(env + cmd + "/bin/bash -c 'cd /opt &&" + ci_command +"'", shell=True)
         # Exit if Error Occurs
         if(returned_value > 0):
             print("\nCI FAILED \nCOMMAND: %s\nEnvironment: %s\n" % (ci_command, env))
-            subprocess.call(env + "docker-compose down", shell=True)
-            exit(returned_value)
+            if CI_EXIT_ON_FAIL:
+                subprocess.call(env + "docker-compose down", shell=True)
+                exit(returned_value)
+            else:
+                bade_color="red"
+                bade_message="Failed"
+
+    # ENV Badge
+    if CI_ENV_BADGES:
+        url = "/badge/" + env_slug[:-1] + "/" + bade_message + "/" + bade_color
+        r = urllib.request.urlopen('https://badgen.net' + urllib.parse.quote(url));
+        open(CI_ENV_BADGE_PATH + '/' + env_slug[:-1] + '.svg', 'wb').write(r.read())
 
     # Stop ENV
     returned_value = subprocess.call(env + "docker-compose down", shell=True)
     if(returned_value > 0):
-        print("\nCI FAILED to start\nEnvironment: %s\n" % (env))
+        print("\nCI FAILED to stop\nEnvironment: %s\n" % (env))
         exit(returned_value)
