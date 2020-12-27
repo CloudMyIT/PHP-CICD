@@ -9,6 +9,10 @@ For more information on using this environment during development [see this page
 
 For more information on using this environment in conjunction with CI/CD [see this page](README-cicd.md)
 
+## Build
+1) Update settings.py
+2) run ./build.py
+
 ## Database Defaults
 ### MySQL
 ```

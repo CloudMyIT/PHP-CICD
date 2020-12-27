@@ -5,7 +5,7 @@
 ###
 
 #Import Settings
-from settings import VERSIONS, REPO_NAME, CODE_PATH, CI_COMMAND
+from settings import VERSIONS, REPO_NAME, CODE_PATH, CI_COMMANDS
 
 # Import Libs
 import os
@@ -23,9 +23,26 @@ for combination in list(itertools.product(*service_versions)):
     for x in range(len(combination)):
         env = env + "VERSION_%s=%s " % (service_names[x].upper(), combination[x])
 
-    cmd = "docker-compose -f docker-compose.yml run php " + CI_COMMAND
-    
-    returned_value = subprocess.call(env + cmd, shell=True)
-    # Exit if Error Occurs
+    cmd = "docker-compose exec php "
+
+    # Start ENV
+    returned_value = subprocess.call(env + "docker-compose up -d", shell=True)
     if(returned_value > 0):
+        print("\nCI FAILED to start\nEnvironment: %s\n" % (env))
+        exit(returned_value)
+
+    # Run CI Commands
+    for ci_command in CI_COMMANDS:
+        print(env + cmd + "/bin/bash -c 'cd /opt &&" + ci_command +"'")
+        returned_value = subprocess.call(env + cmd + "/bin/bash -c 'cd /opt &&" + ci_command +"'", shell=True)
+        # Exit if Error Occurs
+        if(returned_value > 0):
+            print("\nCI FAILED \nCOMMAND: %s\nEnvironment: %s\n" % (ci_command, env))
+            subprocess.call(env + "docker-compose down", shell=True)
+            exit(returned_value)
+
+    # Stop ENV
+    returned_value = subprocess.call(env + "docker-compose down", shell=True)
+    if(returned_value > 0):
+        print("\nCI FAILED to start\nEnvironment: %s\n" % (env))
         exit(returned_value)

@@ -70,6 +70,8 @@ VERSION_MYSQL=latest
 VERSION_POSTGRESQL=latest
 ```
 
+> Version information can be found in `settings.py`
+
 3) Create the following directories
   - `.dev`
   - `.dev/mysql`

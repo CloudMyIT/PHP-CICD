@@ -1,8 +1,14 @@
 #!/usr/bin/python3
 
-CODE_PATH="/workspace"
+CODE_PATH="./"
 
-CI_COMMAND="pwd && ls -al"
+CI_COMMANDS=[
+    "pwd",
+    "ls -al",
+    # "pwd",
+    # "ls -al",
+    #"php -v"
+]
 
 REPO_NAME="cloudmyit/php-cicd"
 
