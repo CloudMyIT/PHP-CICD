@@ -31,13 +31,15 @@ VERSIONS={
         '7.2',
         '7.3',
         '7.4',
-        '8.0' # This will tag as latest as well as it is the largest number in the list
+        '8.0', # This will tag as latest as well as it is the largest number in the list
+        '8.0.1',
+        '8.0.3'
     ],
     'mysql': [
         '5.6',
         '5.7',
         '8.0',
-        'latest'
+        'latest',
     ],
     'postgresql': [
         '9.6',
@@ -45,6 +47,6 @@ VERSIONS={
         '11',
         '12',
         '13',
-        'latest'
+        'latest',
     ]
 }

@@ -24,7 +24,7 @@ for server in VERSIONS.keys():
         # Build the command
         cmd = 'docker build --no-cache services/' + server + ' -f ' + dockerfile
         cmd = cmd + ' --build-arg VERSION=' + version + ' -t %s:%s-%s' %(REPO_NAME,server,version)
-        if("latest" not in VERSIONS[server] and float(max(VERSIONS[server])) == float(version)):
+        if("latest" not in VERSIONS[server] and VERSIONS[server][-1] == version):
             cmd = cmd + ' -t %s:%s-%s' %(REPO_NAME,server,'latest')
         
         # Run the command

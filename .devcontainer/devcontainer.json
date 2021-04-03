@@ -7,7 +7,8 @@
 	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
 	"overrideCommand": false,
 	
-	"workspaceMount": "source=/srv/samba/sda/CloudMyIT/PHP-CICD,target=/workspace,type=bind,consistency=cached",
+	"workspaceMount": "source=/srv/samba/sda/CloudMyIT/PHP-CICD,target=/workspace/,type=bind,consistency=cached",
+	"workspaceFolder": "/workspace/",
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
